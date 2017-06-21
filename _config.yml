@@ -1,0 +1,17 @@
+# Setup
+title:        Deck for Nextcloud
+tagline:      Kanban-style project & personal management tool for Nextcloud 
+baseurl:      ""
+paginate:     1
+
+# About/contact
+author:
+  name:       Deck
+  url:        https://nextcloud.github.io/deck
+
+# Gems
+gems:
+  - jekyll-paginate
+
+#Others
+markdown: kramdown
