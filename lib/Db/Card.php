@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use DateTime;
+use Sabre\VObject\Component\VTodo;
 
 class Card extends RelationalEntity {
 
@@ -106,6 +107,21 @@ class Card extends RelationalEntity {
 		$json['duedate'] = $this->getDuedate(true);
 		unset($json['notified']);
 		return $json;
+	}
+
+	public function getVtodo() {
+		$vtodo = [
+			'SUMMARY' => $this->getTitle(),
+			'DESCRIPTION' => $this->getDescription(),
+			'STATUS' => 'NEEDS_ACTION'
+		];
+		if ($this->duedate !== null) {
+			$vtodo['DUE'] = new DateTime($this->duedate);
+		}
+		if ($this->archived === true) {
+			$vtodo['STATUS'] = 'COMPLETED';
+		}
+		return $vtodo;
 	}
 
 }

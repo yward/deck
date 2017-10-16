@@ -16,10 +16,13 @@
 💥 This is still alpha software: it may not be stable enough for production!
 
 </description>
-    <version>0.3.0-dev2</version>
+    <version>0.3.0-dev3</version>
     <licence>agpl</licence>
     <author>Julius Härtl</author>
     <namespace>Deck</namespace>
+    <types>
+        <dav />
+    </types>
     <category>organization</category>
     <category>office</category>
     <bugs>https://github.com/nextcloud/deck/issues</bugs>
@@ -38,4 +41,12 @@
             <step>OCA\Deck\Migration\UnknownUsers</step>
         </post-migration>
     </repair-steps>
+    <sabre>
+        <collections>
+            <collection>OCA\Deck\Dav\CalendarRoot</collection>
+        </collections>
+        <plugins>
+            <plugin>OCA\Deck\Dav\DeckDavPlugin</plugin>
+        </plugins>
+    </sabre>
 </info>

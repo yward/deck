@@ -138,4 +138,8 @@ class RelationalEntity extends Entity implements \JsonSerializable {
 		return parent::__call($methodName, $args);
 	}
 
+	public function getGuid() {
+		return $this->getId();
+	}
+
 }
