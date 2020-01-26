@@ -33,6 +33,8 @@ use OCA\Deck\BadRequestException;
 
 class LabelService {
 
+	const TITLE_MAX_LENGTH = 100;
+
 	/** @var LabelMapper */
 	private $labelMapper;
 	/** @var PermissionService */
@@ -78,16 +80,20 @@ class LabelService {
 	 */
 	public function create($title, $color, $boardId) {
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
-		if ($color === false || $color === null) {
+		if (empty($color)) {
 			throw new BadRequestException('color must be provided');
 		}
 
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -154,12 +160,16 @@ class LabelService {
 			throw new BadRequestException('label id must be a number');
 		}
 
-		if ($title === false || $title === null || $title === "") {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
-		if ($color === false || $color === null) {
+		if (empty($color)) {
 			throw new BadRequestException('color must be provided');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission($this->labelMapper, $id, Acl::PERMISSION_MANAGE);

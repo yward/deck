@@ -48,6 +48,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class CardService {
 
+	const TITLE_MAX_LENGTH = 255;
+
 	private $cardMapper;
 	private $stackMapper;
 	private $boardMapper;
@@ -159,7 +161,7 @@ class CardService {
 	 * @throws BadrequestException
 	 */
 	public function create($title, $stackId, $type, $order, $owner, $description = '') {
-		if ($title === 'false' || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -175,8 +177,12 @@ class CardService {
 			throw new BadRequestException('order must be a number');
 		}
 
-		if ($owner === false || $owner === null) {
+		if (empty($owner)) {
 			throw new BadRequestException('owner must be provided');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission($this->stackMapper, $stackId, Acl::PERMISSION_EDIT);
@@ -258,7 +264,7 @@ class CardService {
 			throw new BadRequestException('card id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -270,8 +276,12 @@ class CardService {
 			throw new BadRequestException('type must be provided');
 		}
 
-		if ($owner === false || $owner === null) {
+		if (empty($owner)) {
 			throw new BadRequestException('owner must be provided');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission($this->cardMapper, $id, Acl::PERMISSION_EDIT);
@@ -348,7 +358,7 @@ class CardService {
 			throw new BadRequestException('id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 

@@ -51,6 +51,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class BoardService {
 
+	const TITLE_MAX_LENGTH = 100;
+
 	private $boardMapper;
 	private $stackMapper;
 	private $labelMapper;
@@ -266,7 +268,7 @@ class BoardService {
 	 */
 	public function create($title, $userId, $color) {
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -276,6 +278,14 @@ class BoardService {
 
 		if ($color === false || $color === null) {
 			throw new BadRequestException('color must be provided');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than 100 characters');
+		}
+
+		if (!ctype_xdigit($color)) {
+			throw new BadRequestException('color value is invalid');
 		}
 
 		if (!$this->permissionService->canCreate()) {
@@ -424,11 +434,11 @@ class BoardService {
 			throw new BadRequestException('board id must be a number');
 		}
 
-		if ($title === false || $title === null) {
-			throw new BadRequestException('color must be provided');
+		if (empty($title)) {
+			throw new BadRequestException('title must be provided');
 		}
 
-		if ($color === false || $color === null) {
+		if (empty($color)) {
 			throw new BadRequestException('color must be provided');
 		}
 
@@ -436,7 +446,16 @@ class BoardService {
 			throw new BadRequestException('archived must be a boolean');
 		}
 
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than 100 characters');
+		}
+
+		if (!ctype_xdigit($color)) {
+			throw new BadRequestException('color value is invalid');
+		}
+
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_MANAGE);
+
 		$board = $this->find($id);
 		$changes = new ChangeSet($board);
 		$board->setTitle($title);
@@ -630,7 +649,7 @@ class BoardService {
 		}
 
 		$this->permissionService->checkPermission($this->boardMapper, $id, Acl::PERMISSION_READ);
-		
+
 		$board = $this->boardMapper->find($id);
 		$newBoard = new Board();
 		$newBoard->setTitle($board->getTitle() . ' (' . $this->l10n->t('copy') . ')');
@@ -654,7 +673,7 @@ class BoardService {
 			$newStack->setBoardId($newBoard->getId());
 			$this->stackMapper->insert($newStack);
 		}
-		
+
 		return $newBoard;
 	}
 

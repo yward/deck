@@ -127,7 +127,7 @@
             <field>
                 <name>title</name>
                 <type>text</type>
-                <length>100</length>
+                <length>255</length>
                 <notnull>true</notnull>
             </field>
             <field>

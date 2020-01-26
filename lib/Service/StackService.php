@@ -42,6 +42,8 @@ use Symfony\Component\EventDispatcher\GenericEvent;
 
 class StackService {
 
+	const TITLE_MAX_LENGTH = 100;
+
 	private $stackMapper;
 	private $cardMapper;
 	private $boardMapper;
@@ -201,7 +203,7 @@ class StackService {
 	 */
 	public function create($title, $boardId, $order) {
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -211,6 +213,10 @@ class StackService {
 
 		if (is_numeric($boardId) === false) {
 			throw new BadRequestException('board id must be a number');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission(null, $boardId, Acl::PERMISSION_MANAGE);
@@ -289,7 +295,7 @@ class StackService {
 			throw new BadRequestException('stack id must be a number');
 		}
 
-		if ($title === false || $title === null) {
+		if (empty($title)) {
 			throw new BadRequestException('title must be provided');
 		}
 
@@ -299,6 +305,10 @@ class StackService {
 
 		if (is_numeric($order) === false) {
 			throw new BadRequestException('order must be a number');
+		}
+
+		if (mb_strlen($title) > self::TITLE_MAX_LENGTH) {
+			throw new BadRequestException('title is longer than ' . self::TITLE_MAX_LENGTH . ' characters');
 		}
 
 		$this->permissionService->checkPermission($this->stackMapper, $id, Acl::PERMISSION_MANAGE);
