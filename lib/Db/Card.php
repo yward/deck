@@ -24,6 +24,7 @@
 namespace OCA\Deck\Db;
 
 use DateTime;
+use Sabre\VObject\Component\VCalendar;
 
 class Card extends RelationalEntity {
 
@@ -117,6 +118,18 @@ class Card extends RelationalEntity {
 		unset($json['notified']);
 		unset($json['descriptionPrev']);
 		return $json;
+	}
+
+	public function getCalendarObject(): VCalendar {
+		$calendar = new VCalendar();
+		$event = $calendar->createComponent('VEVENT');
+		$event->UID = 'deck-cardevent' . $this->getId() . '@example.com';
+		$event->DTSTAMP = new \DateTime($this->getDuedate());
+		$event->DTSTART = new \DateTime($this->getDuedate());
+		$event->DTEND = new \DateTime($this->getDuedate());
+		$event->SUMMARY = $this->getTitle();
+		$calendar->add($event);
+		return $calendar;
 	}
 
 }
