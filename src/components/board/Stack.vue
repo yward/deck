@@ -40,6 +40,9 @@
 				</form>
 			</transition>
 			<Actions v-if="canManage" :force-menu="true">
+				<ActionButton icon="icon-clone" @click="cloneStack(stack)">
+					{{ t('deck', 'Clone list') }}
+				</ActionButton>
 				<ActionButton icon="icon-delete" @click="deleteStack(stack)">
 					{{ t('deck', 'Delete list') }}
 				</ActionButton>
@@ -177,6 +180,9 @@ export default {
 		},
 		deleteStack(stack) {
 			this.$store.dispatch('deleteStack', stack)
+		},
+		cloneStack(stack) {
+			this.$store.dispatch('cloneStack', stack)
 		},
 		startEditing(stack) {
 			this.copiedStack = Object.assign({}, stack)
