@@ -34,6 +34,23 @@
 					orientation="horizontal"
 					:drag-handle-selector="dragHandleSelector"
 					@drop="onDropStack">
+					<form v-if="stacksByBoard.length === 0" @submit.prevent="addNewStack()">
+						<h4 for="new-stack-input-main">
+							{{ t('deck', 'Add new list') }}
+						</h4>
+						<input id="new-stack-input-main"
+							v-model="newStackTitle"
+							v-focus
+							type="text"
+							class="no-close"
+							:placeholder="t('deck', 'List name')"
+							required>
+						<input v-tooltip="t('deck', 'Add new list')"
+							class="icon-confirm"
+							type="submit"
+							value="">
+					</form>
+
 					<Draggable v-for="stack in stacksByBoard" :key="stack.id">
 						<Stack :stack="stack" />
 					</Draggable>
@@ -75,6 +92,7 @@ export default {
 	data: function() {
 		return {
 			loading: true,
+			newStackTitle: '',
 		}
 	},
 	computed: {
@@ -117,11 +135,10 @@ export default {
 			this.$store.dispatch('orderStack', { stack: this.stacksByBoard[removedIndex], removedIndex, addedIndex })
 		},
 
-		createStack() {
+		addNewStack() {
 			const newStack = {
-				title: 'FooBar',
+				title: this.newStackTitle,
 				boardId: this.id,
-				order: this.stacksByBoard().length,
 			}
 			this.$store.dispatch('createStack', newStack)
 		},
