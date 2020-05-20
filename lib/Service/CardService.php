@@ -564,4 +564,16 @@ class CardService {
 			'\OCA\Deck\Card::onUpdate', new FTSEvent(null, ['id' => $cardId, 'card' => $card])
 		);
 	}
+
+	/**
+	 *
+	 * @return array
+	 * @throws \OCA\Deck\NoPermissionException
+	 * @throws BadRequestException
+	 */
+	public function findAllWithDue($userId) {
+		$cards = $this->cardMapper->findAllWithDue($userId);
+		
+		return $cards;
+	}
 }

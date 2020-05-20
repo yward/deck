@@ -195,4 +195,14 @@ export class CardApi {
 			})
 	}
 
+	findAllWithDue(data) {
+		return axios.get(this.url(`/cards/findAllWithDue`))
+			.then(
+				(response) => Promise.resolve(response.data),
+				(err) => Promise.reject(err)
+			)
+			.catch((err) => Promise.reject(err)
+			)
+	}
+
 }

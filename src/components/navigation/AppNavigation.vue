@@ -24,6 +24,12 @@
 	<div id="app-navigation" :class="{'icon-loading': loading}">
 		<ul id="deck-navigation">
 			<AppNavigationBoardCategory
+				id="deck-navigation-dashboard"
+				:text="t('deck', 'Card Dashboard')"
+				:boards="dashboards"
+				:open-on-add-boards="true"
+				icon="icon-screen" />
+			<AppNavigationBoardCategory
 				id="deck-navigation-all"
 				:text="t('deck', 'All boards')"
 				:boards="noneArchivedBoards"
@@ -110,6 +116,7 @@ export default {
 			'noneArchivedBoards',
 			'archivedBoards',
 			'sharedBoards',
+			'dashboards',
 		]),
 		isAdmin() {
 			// eslint-disable-next-line

@@ -141,6 +141,15 @@ class CardMapper extends DeckMapper implements IPermissionMapper {
 		return $this->findEntities($sql, [$stackId], $limit, $offset);
 	}
 
+	public function findAllWithDue($userId) {
+		$sql = 'SELECT * FROM `*PREFIX*deck_cards`
+		inner join `*PREFIX*deck_stacks` on stack_id = `*PREFIX*deck_stacks.id`
+		inner join `*PREFIX*deck_boards` on board_id = `*PREFIX*deck_boards.id` 
+		left join `*PREFIX*deck_board_acl` on `*PREFIX*deck_boards.id` = `*PREFIX*deck_board_acl.id`
+		where `*PREFIX*deck_boards.owner` = ? OR participant = ?';
+		return $this->findEntities($sql, [$userId]);
+	}
+
 	public function findOverdue() {
 		$sql = 'SELECT id,title,duedate,notified from `*PREFIX*deck_cards` WHERE duedate < NOW() AND NOT archived AND deleted_at = 0';
 		return $this->findEntities($sql);
